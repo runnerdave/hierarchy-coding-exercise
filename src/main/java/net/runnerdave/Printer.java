@@ -8,7 +8,8 @@ import java.util.Map;
  */
 public class Printer {
 
-    public static final String SPACER = "    ";
+    public static final String SPACER = " ";
+    public static final int NUMBER_OF_SPACES = 5;
     public static final String LINE_BREAK = "\r\n";
 
 
@@ -33,10 +34,39 @@ public class Printer {
         return sb;
     }
 
-    public static String treePrinter(Map<Employee, List<Employee>> hierarchy) {
-        StringBuilder str = new StringBuilder();
-        hierarchy.forEach((k, v) -> {
-        });
-        return str.toString();
+    public static StringBuilder branchPrinterWithIndenting(Map<Employee, List<Employee>> hierarchy,
+                                                           Employee root, StringBuilder sb, int indent) {
+        for (Employee emp : hierarchy.get(root)
+                ) {
+
+            if (hierarchy.containsKey(emp)) {
+                //print manager
+                sb.append(indent).append(Printer.SPACER).append(emp.getName()).append(LINE_BREAK);
+                //print team
+                branchPrinterWithIndenting(hierarchy, emp, sb, ++indent);
+                indent--;
+            } else {
+                sb.append(indent).append(Printer.SPACER).append(emp.getName()).append(LINE_BREAK);
+                hierarchy.remove(emp);
+            }
+        }
+
+        return sb;
+    }
+
+    public static String treePrinter(Map<Employee, List<Employee>> hierarchy, Employee root) {
+        StringBuilder sb = new StringBuilder();
+        //print root
+        sb.append(root.getName()).append(LINE_BREAK);
+        sb.append(branchPrinterWithIndenting(hierarchy, root, sb, 0));
+        return sb.toString();
+    }
+
+    private static String generateIndenting(int numberOfSpaces) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numberOfSpaces; i++) {
+            sb.append(SPACER);
+        }
+        return sb.toString();
     }
 }
