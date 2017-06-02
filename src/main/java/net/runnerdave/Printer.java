@@ -41,12 +41,12 @@ public class Printer {
 
             if (hierarchy.containsKey(emp)) {
                 //print manager
-                sb.append(indent).append(Printer.SPACER).append(emp.getName()).append(LINE_BREAK);
+                sb.append(indent).append(generateIndenting(indent*NUMBER_OF_SPACES)).append(emp.getName()).append(LINE_BREAK);
                 //print team
                 branchPrinterWithIndenting(hierarchy, emp, sb, ++indent);
                 indent--;
             } else {
-                sb.append(indent).append(Printer.SPACER).append(emp.getName()).append(LINE_BREAK);
+                sb.append(indent).append(generateIndenting(indent*NUMBER_OF_SPACES)).append(emp.getName()).append(LINE_BREAK);
                 hierarchy.remove(emp);
             }
         }
@@ -58,7 +58,8 @@ public class Printer {
         StringBuilder sb = new StringBuilder();
         //print root
         sb.append(root.getName()).append(LINE_BREAK);
-        sb.append(branchPrinterWithIndenting(hierarchy, root, sb, 0));
+        //print branches underneath
+        sb.append(branchPrinterWithIndenting(hierarchy, root, new StringBuilder(), 1));
         return sb.toString();
     }
 
