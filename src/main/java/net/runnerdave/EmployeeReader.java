@@ -8,10 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.text.MessageFormat;
+import java.util.*;
 
 /**
  * Created by runnerdave on 3/06/17.
@@ -23,11 +21,12 @@ public class EmployeeReader {
 
     /**
      * Reads Employees from CSV file.
+     *
      * @param pathToCsv the path to the csv file.
      * @return List with valid employees.
      */
-    public static List<Employee> getEmployeesFromCSV(String pathToCsv) {
-        List<Employee> employeeList = new ArrayList<>();
+    public static Map<Integer, Employee> getEmployeesFromCSV(String pathToCsv) {
+        Map<Integer, Employee> employeeMap = new HashMap<>();
         try (Reader in = new FileReader(pathToCsv)) {
             Iterable<CSVRecord> records = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
             for (CSVRecord record : records) {
@@ -35,8 +34,9 @@ public class EmployeeReader {
                 String id = record.get(1).trim();
                 String managerId = record.get(2).trim();
                 Optional<Employee> employee = processEmployee(name, id, managerId);
-                if(employee.isPresent()) {
-                    employeeList.add(employee.get());
+                if (employee.isPresent()) {
+                    Employee emp = employee.get();
+                    employeeMap.put(emp.getId(), emp);
                 }
 
             }
@@ -45,13 +45,14 @@ public class EmployeeReader {
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
-        return employeeList;
+        return employeeMap;
     }
 
     /**
      * Process employee and discards invalid ones.
-     * @param name string with the name.
-     * @param idStr string with the id.
+     *
+     * @param name     string with the name.
+     * @param idStr    string with the id.
      * @param mgrIdStr string with the manager id.
      * @return optional of Employee
      */
@@ -59,7 +60,7 @@ public class EmployeeReader {
         Optional<Employee> emp = Optional.empty();
         Integer id = new Integer(0);
         Integer mgrId = new Integer(0);
-        String errorMessage = "Employee entry name= " + name + " id= " + idStr +" mgrStr= " + mgrIdStr;
+        String errorMessage = MessageFormat.format(BUNDLE.getString("message.error.processing"), name, idStr, mgrIdStr);
         boolean invalid = false;
         try {
             id = Integer.parseInt(idStr.trim());
@@ -84,5 +85,48 @@ public class EmployeeReader {
         }
 
         return emp;
+    }
+
+    /**
+     * List of employees for the company.
+     *
+     * @param employees list of valid employees.
+     * @return
+     */
+    public static Map<Employee, List<Employee>> populateHierarchy(Map<Integer, Employee> employees) {
+        Map<Employee, List<Employee>> hierarchy = new HashMap<>();
+        employees.forEach((k, v) -> {
+            List<Employee> team = hierarchy.get(v.getManagerId());
+            if (team == null) {
+                List<Employee> newTeam = new ArrayList<>();
+                //if root manager id is 0
+                if(v.getManagerId() == 0) {
+                    hierarchy.put(v, newTeam);
+                } else {
+                    newTeam.add(v);
+                    hierarchy.put(employees.get(v.getManagerId()), newTeam);
+                }
+            } else {
+                team.add(v);
+            }
+        });
+        return hierarchy;
+    }
+
+    /**
+     * Validates if hierarchy is valid.
+     * Reasons for invalidation:
+     * * Empty map.
+     * * More than one root.
+     * * Employees with no valid manager.
+     * Writes invalid reasons/entries to the logger.
+     *
+     * @param hierarchy the hierarchy to evaluate.
+     * @return true if the hierarchy is valid, false if not
+     */
+    public boolean validateHierarchy(Map<Employee, List<Employee>> hierarchy) {
+        boolean valid = false;
+
+        return valid;
     }
 }
