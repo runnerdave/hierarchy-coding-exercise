@@ -10,7 +10,7 @@ structure and print it out.
 * use recursion to print each branch
     
 #### problems
-* indenting is not quite working yet
+* 
 
 ### 2nd Attempt
 * use a tree structure such as the one described here:

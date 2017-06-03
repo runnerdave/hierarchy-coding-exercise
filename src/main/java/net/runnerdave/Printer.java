@@ -14,44 +14,29 @@ public class Printer {
 
 
     public static StringBuilder branchPrinter(Map<Employee, List<Employee>> hierarchy,
-                                              List<Employee> team, StringBuilder sb) {
-        int indent = 0;
-        for (Employee emp : team
-                ) {
-
-            if (hierarchy.containsKey(emp)) {
-                //print manager
-                indent++;
-                sb.append(indent).append(Printer.SPACER).append(emp.getName()).append(LINE_BREAK);
-                //print team
-                branchPrinter(hierarchy, hierarchy.get(emp), sb);
-                indent--;
-            } else {
-                sb.append(indent).append(Printer.SPACER).append(emp.getName()).append(LINE_BREAK);
-            }
-        }
-
-        return sb;
-    }
-
-    public static StringBuilder branchPrinterWithIndenting(Map<Employee, List<Employee>> hierarchy,
-                                                           Employee root, StringBuilder sb, int indent) {
+                                              Employee root, StringBuilder sb, int indent) {
         for (Employee emp : hierarchy.get(root)
                 ) {
-
             if (hierarchy.containsKey(emp)) {
                 //print manager
-                sb.append(indent).append(generateIndenting(indent*NUMBER_OF_SPACES)).append(emp.getName()).append(LINE_BREAK);
+                printNode(sb, indent, emp);
                 //print team
-                branchPrinterWithIndenting(hierarchy, emp, sb, ++indent);
+                branchPrinter(hierarchy, emp, sb, ++indent);
                 indent--;
             } else {
-                sb.append(indent).append(generateIndenting(indent*NUMBER_OF_SPACES)).append(emp.getName()).append(LINE_BREAK);
+                printNode(sb, indent, emp);
                 hierarchy.remove(emp);
             }
         }
-
         return sb;
+    }
+
+    private static void printNode(StringBuilder sb, int indent, Employee emp) {
+        sb
+                //.append(indent)TODO: remove this line once is all working
+                .append(generateIndenting(indent * NUMBER_OF_SPACES))
+                .append(emp.getName())
+                .append(LINE_BREAK);
     }
 
     public static String treePrinter(Map<Employee, List<Employee>> hierarchy, Employee root) {
@@ -59,7 +44,7 @@ public class Printer {
         //print root
         sb.append(root.getName()).append(LINE_BREAK);
         //print branches underneath
-        sb.append(branchPrinterWithIndenting(hierarchy, root, new StringBuilder(), 1));
+        sb.append(branchPrinter(hierarchy, root, new StringBuilder(), 1));
         return sb.toString();
     }
 

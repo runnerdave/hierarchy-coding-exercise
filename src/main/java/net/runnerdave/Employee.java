@@ -6,6 +6,7 @@ package net.runnerdave;
 public class Employee {
     private String name;
     private Integer id;
+    private Integer managerId;
 
     public String getName() {
         return name;
@@ -13,6 +14,10 @@ public class Employee {
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getManagerId() {
+        return managerId;
     }
 
     @Override
@@ -23,6 +28,7 @@ public class Employee {
         Employee employee = (Employee) o;
 
         if (!getName().equals(employee.getName())) return false;
+        if (!getManagerId().equals(employee.getManagerId())) return false;
         return getId().equals(employee.getId());
     }
 
@@ -33,9 +39,10 @@ public class Employee {
         return result;
     }
 
-    public Employee(String name, Integer id) {
+    public Employee(String name, Integer id, Integer managerId) {
 
         this.name = name;
         this.id = id;
+        this.managerId = managerId;
     }
 }

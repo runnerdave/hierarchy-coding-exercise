@@ -1,11 +1,14 @@
 package net.runnerdave;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Created by davidajimenez on 31/05/2017.
@@ -34,15 +37,15 @@ public class PrinterTest {
         hierarchyDouble = new HashMap<>();
         hierarchyTriple = new HashMap<>();
 
-        emp1 = new Employee("Dan", 1);
-        emp2 = new Employee("Sarah", 2);
-        emp3 = new Employee("Mary", 3);
-        emp4 = new Employee("Pedro", 4);
-        emp5 = new Employee("Juana", 5);
-        emp6 = new Employee("Berta", 6);
-        emp7 = new Employee("Marion", 7);
-        emp8 = new Employee("Juan", 8);
-        emp9 = new Employee("Ricardo", 9);
+        emp1 = new Employee("Dan", 1, 2);
+        emp2 = new Employee("Sarah", 2, 7);
+        emp3 = new Employee("Mary", 3, 2);
+        emp4 = new Employee("Pedro", 4, 5);
+        emp5 = new Employee("Juana", 5, 7);
+        emp6 = new Employee("Berta", 6, 5);
+        emp7 = new Employee("Marion", 7, 0);
+        emp8 = new Employee("Juan", 8, 6);
+        emp9 = new Employee("Ricardo", 9, 6);
 
         sarahTeam = Arrays.asList(emp1, emp3);
         juanaTeam = Arrays.asList(emp4, emp6);
@@ -64,43 +67,97 @@ public class PrinterTest {
     }
 
     @Test
-    public void testTreePrinterSimple() {
-        StringBuilder sb = new StringBuilder();
-        String target = "Sarah" + Printer.LINE_BREAK + Printer.SPACER + "Dan"
-                            + Printer.LINE_BREAK + Printer.SPACER + "Mary" + Printer.LINE_BREAK;
-        System.out.println(target);
-        System.out.println("#####");
-        System.out.println(Printer.branchPrinter(hierarchySimple, sarahTeam, sb));
-        //assertTrue(target.equalsIgnoreCase(Printer.branchPrinter(hierarchySimple)));
+    public void testBranchPrinterSimple() {
+        StringBuilder sb = new StringBuilder()
+                .append("Dan")
+                .append(Printer.LINE_BREAK)
+                .append("Mary")
+                .append(Printer.LINE_BREAK);
+        assertTrue(sb.equals(Printer.branchPrinter(hierarchySimple, emp2, sb, 0)));
     }
 
     @Test
-    public void testTreePrinterDouble() {
-        StringBuilder sb = new StringBuilder();
-//        String target = "Juana" + Printer.LINE_BREAK + Printer.SPACER + "Sarah" + Printer.LINE_BREAK + Printer.SPACER + "Dan"
-//                + Printer.LINE_BREAK + Printer.SPACER + "Mary" + Printer.LINE_BREAK;
-//        System.out.println(target);
-        System.out.println("#####");
-        System.out.println(Printer.branchPrinter(hierarchyDouble, juanaTeam, sb));
-//        assertTrue(target.equalsIgnoreCase(Printer.branchPrinter(hierarchyDouble)));
+    public void testBranchPrinterDouble() {
+        StringBuilder sb = new StringBuilder()
+                .append("Sarah")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 5))
+                .append("Dan")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 5))
+                .append("Mary")
+                .append(Printer.LINE_BREAK)
+                .append("Juana")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 5))
+                .append("Pedro")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 5))
+                .append("Berta")
+                .append(Printer.LINE_BREAK);
+        StringBuilder branch = Printer.branchPrinter(hierarchyDouble, emp7, new StringBuilder(), 0);
+        assertTrue(sb.toString().equalsIgnoreCase(branch.toString()));
     }
 
     @Test
-    public void testTreePrinterWithIndentingDouble() {
-        StringBuilder sb = new StringBuilder();
-        System.out.println("#####");
-        System.out.println(Printer.branchPrinterWithIndenting(hierarchyDouble, emp5, sb, 0));
+    public void testBranchPrinterTriple() {
+        StringBuilder sb = new StringBuilder()
+                .append("Sarah")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 5))
+                .append("Dan")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 5))
+                .append("Mary")
+                .append(Printer.LINE_BREAK)
+                .append("Juana")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 5))
+                .append("Pedro")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 5))
+                .append("Berta")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 10))
+                .append("Juan")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 10))
+                .append("Ricardo")
+                .append(Printer.LINE_BREAK);
+        StringBuilder branch = Printer.branchPrinter(hierarchyTriple, emp7, new StringBuilder(), 0);
+        assertTrue(sb.toString().equalsIgnoreCase(branch.toString()));
     }
 
     @Test
-    public void testBranchPrinterWithIndentingTriple() {
-        StringBuilder sb = new StringBuilder();
-        System.out.println("#####");
-        System.out.println(Printer.branchPrinterWithIndenting(hierarchyTriple, emp7, sb, 0));
-    }
-
-    @Test
-    public void testTreePrinterWithIndenting() {
-        System.out.println(Printer.treePrinter(hierarchyTriple, emp7));
+    public void testTreePrinter() {
+        StringBuilder sb = new StringBuilder()
+                .append("Marion")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 5))
+                .append("Sarah")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 10))
+                .append("Dan")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 10))
+                .append("Mary")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 5))
+                .append("Juana")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 10))
+                .append("Pedro")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 10))
+                .append("Berta")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 15))
+                .append("Juan")
+                .append(Printer.LINE_BREAK)
+                .append(StringUtils.repeat(StringUtils.SPACE, 15))
+                .append("Ricardo")
+                .append(Printer.LINE_BREAK);
+        String tree = Printer.treePrinter(hierarchyTriple, emp7);
+        assertTrue(sb.toString().trim().equalsIgnoreCase(tree.trim()));
     }
 }

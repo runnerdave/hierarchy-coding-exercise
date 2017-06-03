@@ -16,3 +16,4 @@ buildNumber.properties
 /.idea/
 /hierarchy.iml
 .DS_Store
+/application.log
