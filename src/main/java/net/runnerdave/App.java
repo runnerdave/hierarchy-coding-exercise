@@ -11,7 +11,7 @@ public class App {
 
         System.out.println("Welcome to the hierarchy generator!");
 
-        Map<Integer, Employee> readEmployees = EmployeeReader.getEmployeesFromCSV("employees_no_managers.csv");
+        Map<Integer, Employee> readEmployees = EmployeeReader.getEmployeesFromCSV("employees.csv");
         Company company = null;
         try {
             company = new Company(readEmployees);
