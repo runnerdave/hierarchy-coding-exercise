@@ -16,7 +16,15 @@ structure and print it out.
 ## Run
 ``java -jar target/hierarchy-1.0-SNAPSHOT-jar-with-dependencies.jar``
 
-check the application.log file for errors
+The default run is the _happy path_, to test with data with problems run the following commands:
+
+``java -jar target/hierarchy-1.0-SNAPSHOT-jar-with-dependencies.jar employees_no_managers.csv``
+
+``java -jar target/hierarchy-1.0-SNAPSHOT-jar-with-dependencies.jar employees_two_bosses.csv``
+
+``java -jar target/hierarchy-1.0-SNAPSHOT-jar-with-dependencies.jar employees_invalid_managers.csv``
+
+...and check the **application.log** file for errors
 
 ## Test
 ``$mvn clean test``
