@@ -20,7 +20,7 @@ structure and print it out.
 ``$mvn clean test``
 
 The test cases for the Printer use the following structure:
-
+![test hierarchies](https://github.com/runnerdave/hierarchy-coding-exercise/blob/master/testHierarchies.png)
 
 ## Approaches
 
