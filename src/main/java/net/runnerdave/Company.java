@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * Represents a company with a CEO and employees.
- *
+ * <p>
  * Created by runnerdave on 4/06/17.
  */
 public class Company {
@@ -18,12 +18,16 @@ public class Company {
     private Employee ceo;
     private Map<Employee, List<Employee>> hierarchy;
 
-    public Company(Map<Integer, Employee> employeeMap) throws TooManyBossesException {
+    public Company(Map<Integer, Employee> employeeMap) throws TooManyBossesException, NoBossException {
         try {
             this.hierarchy = populateHierarchy(employeeMap);
-            //TODO: write method for verifying the map for employees with invalid managers
         } catch (IllegalArgumentException e) {
             throw new TooManyBossesException(e.getMessage());
+        }
+        if (this.getCeo() == null) {
+            String noBoss = BUNDLE.getString("message.error.no.boss");
+            LOGGER.error(noBoss);
+            throw new NoBossException(noBoss);
         }
     }
 
@@ -77,5 +81,29 @@ public class Company {
 
         });
         return hierarchy;
+    }
+
+    /**
+     * Verifies that employees have managerIds that exist in the map.
+     * Logs all occurrences of problematic employees for analysis.
+     *
+     * @param employeeMap
+     * @return false if an employee that is not a manager has a manager id that is not in the company.
+     */
+    public boolean isValidOrganizationStructure(Map<Integer, Employee> employeeMap) {
+        boolean isValid = true;
+        for (Employee employee : employeeMap.values()
+                ) {
+            if (employee.getManagerId() != 0 && !employeeMap.containsKey(employee.getManagerId())) {
+                isValid = false;
+                LOGGER.warn(MessageFormat.format(BUNDLE.getString("message.warning.employee.invalid.manager"),
+                        employee.getName(),
+                        employee.getId(),
+                        employee.getManagerId()));
+
+            }
+        }
+
+        return isValid;
     }
 }

@@ -11,11 +11,13 @@ public class App {
 
         System.out.println("Welcome to the hierarchy generator!");
 
-        Map<Integer, Employee> readEmployees = EmployeeReader.getEmployeesFromCSV("employees.csv");
+        Map<Integer, Employee> readEmployees = EmployeeReader.getEmployeesFromCSV("employees_no_managers.csv");
         Company company = null;
         try {
             company = new Company(readEmployees);
-        } catch (TooManyBossesException e) {
+            //warn that there are errors in the input data, however let it run
+            company.isValidOrganizationStructure(readEmployees);
+        } catch (TooManyBossesException | NoBossException e) {
             System.out.println("Invalid input data, check the logs for errors.");
         }
         if (company != null) {
