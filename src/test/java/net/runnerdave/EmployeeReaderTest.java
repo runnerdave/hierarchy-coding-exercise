@@ -8,6 +8,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 /**
+ * Sets of tests for the EmployeeReader.
+ *
  * Created by runnerdave on 3/06/17.
  */
 public class EmployeeReaderTest {
@@ -22,18 +24,15 @@ public class EmployeeReaderTest {
 
     @Test
     public void testProcessEmployee() {
+        //valid employee
         assertEquals(new Employee("Pedro", 1, 6), EmployeeReader.processEmployee("Pedro", "1", " 6 ").get());
+        //invalid manager id
         assertEquals(false, EmployeeReader.processEmployee("Pedro", "1", " zz ").isPresent());
+        //valid boss
         assertEquals(new Employee("Juan", 1, 0), EmployeeReader.processEmployee("Juan", "1 ", "").get());
+        //invalid id
         assertEquals(false, EmployeeReader.processEmployee("Juan", "dd ", "").isPresent());
     }
 
-    @Test
-    public void testPopulateHierarchy() {
-        Map<Integer, Employee> sample = new HashMap<>();
-        sample.put(1, new Employee("Juan", 1, 0));
-        sample.put(2, new Employee("Pedro", 2, 1));
-        Map<Employee, List<Employee>> hierarchy = EmployeeReader.populateHierarchy(sample);
-        System.out.println(hierarchy);
-    }
+
 }

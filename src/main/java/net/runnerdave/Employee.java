@@ -1,6 +1,8 @@
 package net.runnerdave;
 
 /**
+ * Represents an employee in the company.
+ *
  * Created by davidajimenez on 31/05/2017.
  */
 public class Employee {
@@ -28,14 +30,15 @@ public class Employee {
         Employee employee = (Employee) o;
 
         if (!getName().equals(employee.getName())) return false;
-        if (!getManagerId().equals(employee.getManagerId())) return false;
-        return getId().equals(employee.getId());
+        if (!getId().equals(employee.getId())) return false;
+        return getManagerId() != null ? getManagerId().equals(employee.getManagerId()) : employee.getManagerId() == null;
     }
 
     @Override
     public int hashCode() {
         int result = getName().hashCode();
         result = 31 * result + getId().hashCode();
+        result = 31 * result + (getManagerId() != null ? getManagerId().hashCode() : 0);
         return result;
     }
 

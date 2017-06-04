@@ -1,6 +1,5 @@
 package net.runnerdave;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,7 +12,18 @@ public class App {
         System.out.println("Welcome to the hierarchy generator!");
 
         Map<Integer, Employee> readEmployees = EmployeeReader.getEmployeesFromCSV("employees.csv");
-        Map<Employee, List<Employee>> hierarchy = EmployeeReader.populateHierarchy(readEmployees);
-        System.out.println(Printer.treePrinter(hierarchy, readEmployees.get(150)));
+        Company company = null;
+        try {
+            company = new Company(readEmployees);
+        } catch (TooManyBossesException e) {
+            System.out.println("Invalid input data, check the logs for errors.");
+        }
+        if (company != null) {
+            System.out.println(EmployeePrinter.treePrinter(company.getHierarchy(), company.getCeo()));
+        } else {
+            System.out.println("Error in initialization of company, check the logs for errors.");
+        }
+
+
     }
 }
