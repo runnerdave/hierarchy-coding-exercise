@@ -4,7 +4,7 @@ Coding exercise to represent a hierarchical manager - employee
 structure and print it out.
 
 # Problem statement
-
+![problem statement](https://github.com/runnerdave/hierarchy-coding-exercise/blob/master/problem-for-momenton.png)
 
 # Requirements
 * Java 8
@@ -38,5 +38,5 @@ The test cases for the Printer use the following structure:
 (not implemented)
 * use a tree structure such as the one described here:
 https://stackoverflow.com/questions/30502723/display-tree-hierarchy-with-their-values-in-java
-* much natural model to a hierarchy
+* much more natural model to a hierarchy
 * harder to implement and understand (Tree vs Maps)
