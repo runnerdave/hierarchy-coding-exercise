@@ -16,6 +16,8 @@ structure and print it out.
 ## Run
 ``java -jar target/hierarchy-1.0-SNAPSHOT-jar-with-dependencies.jar``
 
+check the application.log file for errors
+
 ## Test
 ``$mvn clean test``
 

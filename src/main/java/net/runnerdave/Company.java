@@ -21,6 +21,7 @@ public class Company {
     public Company(Map<Integer, Employee> employeeMap) throws TooManyBossesException {
         try {
             this.hierarchy = populateHierarchy(employeeMap);
+            //TODO: write method for verifying the map for employees with invalid managers
         } catch (IllegalArgumentException e) {
             throw new TooManyBossesException(e.getMessage());
         }
