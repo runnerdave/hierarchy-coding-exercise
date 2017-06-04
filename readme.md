@@ -41,7 +41,7 @@ The test cases for the Printer use the following structure:
 #### critique
 * Data structures are simple (Maps and Lists)
 * Recursion can cause a stack overflow with big hierarchies
-* Printing algortithm is relatively easy to understand.
+* Printing algorithm is relatively easy to understand.
 * Data structure population algorithm is not as simple.
 
 ### 2nd Approach
