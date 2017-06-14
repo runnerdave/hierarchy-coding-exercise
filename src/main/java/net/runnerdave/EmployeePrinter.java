@@ -34,7 +34,6 @@ public class EmployeePrinter {
                 indent--;
             } else {
                 printNode(sb, indent, emp);
-                hierarchy.remove(emp);
             }
         }
         return sb;

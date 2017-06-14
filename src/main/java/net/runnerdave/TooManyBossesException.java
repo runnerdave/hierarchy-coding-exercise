@@ -5,7 +5,7 @@ package net.runnerdave;
  *
  * Created by runnerdave on 4/06/17.
  */
-public class TooManyBossesException extends Exception {
+public class TooManyBossesException extends RuntimeException {
     public TooManyBossesException(String message) {
         super(message);
     }

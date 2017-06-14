@@ -2,13 +2,14 @@ package net.runnerdave;
 
 /**
  * Represents an employee in the company.
- *
+ * <p>
  * Created by davidajimenez on 31/05/2017.
  */
 public class Employee {
     private String name;
     private Integer id;
     private Integer managerId;
+    private boolean isCEO;
 
     public String getName() {
         return name;
@@ -20,6 +21,10 @@ public class Employee {
 
     public Integer getManagerId() {
         return managerId;
+    }
+
+    public boolean isCEO() {
+        return isCEO;
     }
 
     @Override
@@ -42,10 +47,11 @@ public class Employee {
         return result;
     }
 
-    public Employee(String name, Integer id, Integer managerId) {
+    public Employee(String name, Integer id, Integer managerId, boolean isCEO) {
 
         this.name = name;
         this.id = id;
         this.managerId = managerId;
+        this.isCEO = isCEO;
     }
 }

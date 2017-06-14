@@ -58,38 +58,51 @@ _Performed by: I.A. on Jun 5th_
 
 1. recommendation: usage of Logger for exception handling instead of console.
 
-response: taken into account and implemented
+response: **valid** point, taken into account and implemented
 
 ### file: /src/main/java/net/runnerdave/Company.java
 
 1. recommendation: avoid double handling of the data structure by processing the information once.
 
-response: valid point, still need to think about how to implement it better TODO
+response: **valid** point, implemented by removing the unnecessary method and logging warning messages when 
+employees had invalid managers. This has made the class much simpler.
 
 2. recommendation: remove instance variable: ceo and add that property to the Employee class.
  
- response: valid point, it is a cleaner code that way. TODO
+ response: **debatable** point, the Employee class has now been added a method isCeo however the company 
+ still needs the instance variable for ceo as this is the root that is required when printing.
+ Also the use of this property in the employee class did not reduce the code significantly.
+ 
+3. recommendation: better handling of exception: TooManyBosses
+
+response: **valid** point, the exception was unnecessarily caught in the constructor, this has been amended.
 
 ### file: /src/main/java/net/runnerdave/EmployeePrinter.java
 
 1. recommendation: do not remove objects from the map in every pass while printing the tree branch.
 
-response: I think I did that on purpose, need to remove it and see if the tests still pass. TODO
+response: **valid** point, the removal of the value was unnecessary, probably was a left over from an initial idea.
 
 2. I.A.: In this class StringBuilder is used for obvious reasons.
    If I challenge you that you could have used String and + operator instead to keep things simple and light
    and it wouldn't have made any difference, would you agree?
    How would you prove me wrong or right showing something concrete?
    
-response: TODO
+response: The creation of new String objects is an expensive process (due to their immutability) that is noticeable only when used in much bigger instances
+than this example, so _I would agree_ that it would not have made any difference in this example.
+
+As for the concrete example, I have modified and ran in my computer at home (Ubuntu 16.04 8GB ram, open jdk 1.8.0_131):
+the following set of tests: [tests for String concatenation vs StringBuilder append()](https://github.com/runnerdave/katas/blob/master/src/main/java/net/runnerdave/TestStrings.java)
+
+In there it is evident that only after 10000 iterations there seem to appear noticeable differences. So for readibility and simplicity the + operator is preferable.
 
 ### file: /src/test/java/net/runnerdave/EmployeePrinterTest.java
 
 1. recommendation: usage of @Before to do the setup of the test case
 
-response: valid point TODO
+response: **valid** point, implemented.
 
 2. recommendation: present the expected string in a more readable way.
 
-response: valid point TODO
+response: **valid** point, implemented.
 

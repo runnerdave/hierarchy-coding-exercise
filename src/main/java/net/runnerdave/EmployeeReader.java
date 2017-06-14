@@ -62,6 +62,7 @@ public class EmployeeReader {
         Optional<Employee> emp = Optional.empty();
         Integer id = 0;
         Integer mgrId = 0;
+        boolean isCEO = false;
         String errorMessage = MessageFormat.format(BUNDLE.getString("message.error.processing"), name, idStr, mgrIdStr);
         boolean invalid = false;
         try {
@@ -74,6 +75,8 @@ public class EmployeeReader {
             //if empty leave default 0
             if (!mgrIdStr.trim().isEmpty())
                 mgrId = Integer.parseInt(mgrIdStr.trim());
+            else
+                isCEO = true;
         } catch (NumberFormatException e) {
             invalid = true;
             errorMessage += " has invalid manager id";
@@ -82,7 +85,7 @@ public class EmployeeReader {
         if (invalid) {
             LOGGER.error(errorMessage);
         } else {
-            Employee employee = new Employee(name, id, mgrId);
+            Employee employee = new Employee(name, id, mgrId, isCEO);
             emp = Optional.of(employee);
         }
 

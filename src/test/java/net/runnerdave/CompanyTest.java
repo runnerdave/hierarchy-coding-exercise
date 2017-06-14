@@ -19,8 +19,8 @@ public class CompanyTest {
     @Test
     public void testPopulateHierarchy() throws TooManyBossesException, NoBossException {
         Map<Integer, Employee> sample = new HashMap<>();
-        Employee boss = new Employee("Juan", 1, 0);
-        Employee worker = new Employee("Pedro", 2, 1);
+        Employee boss = new Employee("Juan", 1, 0, true);
+        Employee worker = new Employee("Pedro", 2, 1, false);
         sample.put(1, boss);
         sample.put(2, worker);
         Company company = new Company(sample);
@@ -32,8 +32,8 @@ public class CompanyTest {
     @Test
     public void testPopulateWithTwoBosses() throws NoBossException {
         Map<Integer, Employee> sample = new HashMap<>();
-        Employee boss = new Employee("Juan", 1, 0);
-        Employee worker = new Employee("Pedro", 2, 0);
+        Employee boss = new Employee("Juan", 1, 0, true);
+        Employee worker = new Employee("Pedro", 2, 0, true);
         sample.put(1, boss);
         sample.put(2, worker);
         try {
@@ -43,33 +43,5 @@ public class CompanyTest {
         }
     }
 
-    @Test
-    public void testEmployeesWithInvalidManagers() throws TooManyBossesException, NoBossException {
-        Map<Integer, Employee> sample = new HashMap<>();
-        Employee boss = new Employee("Juan", 1, 0);
-        Employee worker = new Employee("Pedro", 2, 1);
-        Employee randomDude = new Employee("Random", 3, 45);
-        sample.put(1, boss);
-        sample.put(2, worker);
-        sample.put(3, randomDude);
 
-        Company company = new Company(sample);
-
-        assertFalse(company.isValidOrganizationStructure(sample));
-    }
-
-    @Test
-    public void testEmployeesWithValidManagers() throws TooManyBossesException, NoBossException {
-        Map<Integer, Employee> sample = new HashMap<>();
-        Employee boss = new Employee("Juan", 1, 0);
-        Employee worker = new Employee("Pedro", 2, 1);
-        Employee worker2 = new Employee("Maria", 3, 1);
-        sample.put(1, boss);
-        sample.put(2, worker);
-        sample.put(3, worker2);
-
-        Company company = new Company(sample);
-
-        assertTrue(company.isValidOrganizationStructure(sample));
-    }
 }

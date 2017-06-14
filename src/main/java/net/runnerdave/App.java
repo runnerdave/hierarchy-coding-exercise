@@ -1,6 +1,9 @@
 package net.runnerdave;
 
+import org.apache.log4j.Logger;
+
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * Process the input of csv Employees to print a hierarchical
@@ -8,32 +11,34 @@ import java.util.Map;
  */
 public class App {
 
+    private final static ResourceBundle BUNDLE = ResourceBundle.getBundle("bundle");
+    private final static Logger LOGGER = Logger.getLogger(EmployeeReader.class);
+
     /**
      * Main method for the application, can accept different files as input in the args array.
+     *
      * @param args if first value in the array is present can override default file.
      */
     public static void main(String[] args) {
 
-        String inputFile = "employees.csv";
+        String inputFile = BUNDLE.getString("input.file.default");
         if (args.length == 1) {
             inputFile = args[0];
         }
 
-        System.out.println("Welcome to the hierarchy generator!");
+        System.out.println(BUNDLE.getString("message.welcome"));
 
         Map<Integer, Employee> readEmployees = EmployeeReader.getEmployeesFromCSV(inputFile);
         Company company = null;
         try {
             company = new Company(readEmployees);
-            //warn that there are errors in the input data, however let it run
-            company.isValidOrganizationStructure(readEmployees);
         } catch (TooManyBossesException | NoBossException e) {
-            System.out.println("Invalid input data, check the logs for errors.");
+            LOGGER.error(BUNDLE.getString("message.error.invalid.input.data"));
         }
         if (company != null) {
             System.out.println(EmployeePrinter.treePrinter(company.getHierarchy(), company.getCeo()));
         } else {
-            System.out.println("Error in initialization of company, check the logs for errors.");
+            LOGGER.error(BUNDLE.getString("message.error.initialization"));
         }
 
 

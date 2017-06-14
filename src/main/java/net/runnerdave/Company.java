@@ -19,11 +19,7 @@ public class Company {
     private Map<Employee, List<Employee>> hierarchy;
 
     public Company(Map<Integer, Employee> employeeMap) throws TooManyBossesException, NoBossException {
-        try {
-            this.hierarchy = populateHierarchy(employeeMap);
-        } catch (IllegalArgumentException e) {
-            throw new TooManyBossesException(e.getMessage());
-        }
+        this.hierarchy = populateHierarchy(employeeMap);
         if (this.getCeo() == null) {
             String noBoss = BUNDLE.getString("message.error.no.boss");
             LOGGER.error(noBoss);
@@ -52,23 +48,27 @@ public class Company {
      *
      * @param employees map of valid employees.
      * @return Map with a populated hierarchy.
-     * @precondition there is a manager and it's id is 0
      */
     private Map<Employee, List<Employee>> populateHierarchy(Map<Integer, Employee> employees) {
         Map<Employee, List<Employee>> hierarchy = new HashMap<>();
         employees.forEach((k, v) -> {
-            int teamLeadId = v.getManagerId();
-            if (teamLeadId == 0) {//this is the root, set the company ceo as this user and don't add him/her to a team.
+            if (v.isCEO()){//this is the root, set the company ceo as this user and don't add him/her to a team.
                 if (this.ceo == null) {
                     this.ceo = v;
                 } else {
                     String errorMessage = MessageFormat.format(BUNDLE.getString("message.error.multiple.bosses"),
                             this.ceo.getName(), v.getName());
                     LOGGER.error(errorMessage);
-                    throw new IllegalArgumentException(errorMessage);
+                    throw new TooManyBossesException(errorMessage);
                 }
             } else {//all other employees below the root
-                Employee teamLead = employees.get(teamLeadId);
+                Employee teamLead = employees.get(v.getManagerId());
+                if (teamLead == null) {
+                    LOGGER.warn(MessageFormat.format(BUNDLE.getString("message.warning.employee.invalid.manager"),
+                            v.getName(),
+                            v.getId(),
+                            v.getManagerId()));
+                }
                 List<Employee> team = hierarchy.get(teamLead);
                 if (team == null) {
                     List<Employee> newTeam = new ArrayList<>();
@@ -81,29 +81,5 @@ public class Company {
 
         });
         return hierarchy;
-    }
-
-    /**
-     * Verifies that employees have managerIds that exist in the map.
-     * Logs all occurrences of problematic employees for analysis.
-     *
-     * @param employeeMap
-     * @return false if an employee that is not a manager has a manager id that is not in the company.
-     */
-    public boolean isValidOrganizationStructure(Map<Integer, Employee> employeeMap) {
-        boolean isValid = true;
-        for (Employee employee : employeeMap.values()
-                ) {
-            if (employee.getManagerId() != 0 && !employeeMap.containsKey(employee.getManagerId())) {
-                isValid = false;
-                LOGGER.warn(MessageFormat.format(BUNDLE.getString("message.warning.employee.invalid.manager"),
-                        employee.getName(),
-                        employee.getId(),
-                        employee.getManagerId()));
-
-            }
-        }
-
-        return isValid;
     }
 }

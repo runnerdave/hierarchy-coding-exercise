@@ -1,6 +1,7 @@
 package net.runnerdave;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import static junit.framework.TestCase.assertTrue;
 
 /**
  * Set of tests for the EmployeePrinter class.
- *
+ * <p>
  * Created by davidajimenez on 31/05/2017.
  */
 public class EmployeePrinterTest {
@@ -34,20 +35,21 @@ public class EmployeePrinterTest {
     private Employee emp8;
     private Employee emp9;
 
-    {
+    @Before
+    public void setup() {
         hierarchySimple = new HashMap<>();
         hierarchyDouble = new HashMap<>();
         hierarchyTriple = new HashMap<>();
 
-        emp1 = new Employee("Dan", 1, 2);
-        emp2 = new Employee("Sarah", 2, 7);
-        emp3 = new Employee("Mary", 3, 2);
-        emp4 = new Employee("Pedro", 4, 5);
-        emp5 = new Employee("Juana", 5, 7);
-        emp6 = new Employee("Berta", 6, 5);
-        emp7 = new Employee("Marion", 7, 0);
-        emp8 = new Employee("Juan", 8, 6);
-        emp9 = new Employee("Ricardo", 9, 6);
+        emp1 = new Employee("Dan", 1, 2, false);
+        emp2 = new Employee("Sarah", 2, 7, false);
+        emp3 = new Employee("Mary", 3, 2, false);
+        emp4 = new Employee("Pedro", 4, 5, false);
+        emp5 = new Employee("Juana", 5, 7, false);
+        emp6 = new Employee("Berta", 6, 5, false);
+        emp7 = new Employee("Marion", 7, 0, true);
+        emp8 = new Employee("Juan", 8, 6, false);
+        emp9 = new Employee("Ricardo", 9, 6, false);
 
         sarahTeam = Arrays.asList(emp1, emp3);
         juanaTeam = Arrays.asList(emp4, emp6);
@@ -70,96 +72,51 @@ public class EmployeePrinterTest {
 
     @Test
     public void testBranchPrinterSimple() {
-        StringBuilder sb = new StringBuilder()
-                .append("Dan")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append("Mary")
-                .append(EmployeePrinter.LINE_BREAK);
-        assertTrue(sb.equals(EmployeePrinter.branchPrinter(hierarchySimple, emp2, sb, 0)));
+        String expected = "Dan\r\n" +
+                    "Mary\r\n";
+        StringBuilder branch = EmployeePrinter.branchPrinter(hierarchySimple, emp2, new StringBuilder(), 0);
+        assertTrue(expected.equalsIgnoreCase(branch.toString()));
     }
 
     @Test
     public void testBranchPrinterDouble() {
-        StringBuilder sb = new StringBuilder()
-                .append("Sarah")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 5))
-                .append("Dan")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 5))
-                .append("Mary")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append("Juana")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 5))
-                .append("Pedro")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 5))
-                .append("Berta")
-                .append(EmployeePrinter.LINE_BREAK);
+        String expected = "Sarah\r\n" +
+                "     Dan\r\n" +
+                "     Mary\r\n" +
+                "Juana\r\n" +
+                "     Pedro\r\n" +
+                "     Berta\r\n";
         StringBuilder branch = EmployeePrinter.branchPrinter(hierarchyDouble, emp7, new StringBuilder(), 0);
-        assertTrue(sb.toString().equalsIgnoreCase(branch.toString()));
+        assertTrue(expected.equalsIgnoreCase(branch.toString()));
     }
 
     @Test
     public void testBranchPrinterTriple() {
-        StringBuilder sb = new StringBuilder()
-                .append("Sarah")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 5))
-                .append("Dan")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 5))
-                .append("Mary")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append("Juana")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 5))
-                .append("Pedro")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 5))
-                .append("Berta")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 10))
-                .append("Juan")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 10))
-                .append("Ricardo")
-                .append(EmployeePrinter.LINE_BREAK);
+        String expected = "Sarah\r\n" +
+                "     Dan\r\n" +
+                "     Mary\r\n" +
+                "Juana\r\n" +
+                "     Pedro\r\n" +
+                "     Berta\r\n" +
+                "          Juan\r\n" +
+                "          Ricardo\r\n";
         StringBuilder branch = EmployeePrinter.branchPrinter(hierarchyTriple, emp7, new StringBuilder(), 0);
-        assertTrue(sb.toString().equalsIgnoreCase(branch.toString()));
+        assertTrue(expected.equalsIgnoreCase(branch.toString()));
     }
+
 
     @Test
     public void testTreePrinter() {
-        StringBuilder sb = new StringBuilder()
-                .append("Marion")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 5))
-                .append("Sarah")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 10))
-                .append("Dan")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 10))
-                .append("Mary")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 5))
-                .append("Juana")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 10))
-                .append("Pedro")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 10))
-                .append("Berta")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 15))
-                .append("Juan")
-                .append(EmployeePrinter.LINE_BREAK)
-                .append(StringUtils.repeat(StringUtils.SPACE, 15))
-                .append("Ricardo")
-                .append(EmployeePrinter.LINE_BREAK);
+        String expected = "Marion\r\n" +
+                    "     Sarah\r\n" +
+                    "          Dan\r\n" +
+                    "          Mary\r\n" +
+                    "     Juana\r\n" +
+                    "          Pedro\r\n" +
+                    "          Berta\r\n" +
+                    "               Juan\r\n" +
+                    "               Ricardo\r\n";
         String tree = EmployeePrinter.treePrinter(hierarchyTriple, emp7);
-        assertTrue(sb.toString().trim().equalsIgnoreCase(tree.trim()));
+        assertTrue(expected.trim().equalsIgnoreCase(tree.trim()));
     }
 }

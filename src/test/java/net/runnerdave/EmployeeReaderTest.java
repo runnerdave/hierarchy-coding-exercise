@@ -15,8 +15,8 @@ import static org.junit.Assert.assertEquals;
 public class EmployeeReaderTest {
     @Test
     public void testReadCSV() {
-        List<Employee> sample = Arrays.asList(new Employee("Juan", 1, 0),
-                new Employee("Pedro", 2, 1));
+        List<Employee> sample = Arrays.asList(new Employee("Juan", 1, 0, true),
+                new Employee("Pedro", 2, 1, false));
         String pathToCsv = "testDataSimple.csv";
         Map<Integer, Employee> readEmployees = EmployeeReader.getEmployeesFromCSV(pathToCsv);
         assertArrayEquals(sample.toArray(), readEmployees.values().toArray());
@@ -25,11 +25,11 @@ public class EmployeeReaderTest {
     @Test
     public void testProcessEmployee() {
         //valid employee
-        assertEquals(new Employee("Pedro", 1, 6), EmployeeReader.processEmployee("Pedro", "1", " 6 ").get());
+        assertEquals(new Employee("Pedro", 1, 6, false), EmployeeReader.processEmployee("Pedro", "1", " 6 ").get());
         //invalid manager id
         assertEquals(false, EmployeeReader.processEmployee("Pedro", "1", " zz ").isPresent());
         //valid boss
-        assertEquals(new Employee("Juan", 1, 0), EmployeeReader.processEmployee("Juan", "1 ", "").get());
+        assertEquals(new Employee("Juan", 1, 0, true), EmployeeReader.processEmployee("Juan", "1 ", "").get());
         //invalid id
         assertEquals(false, EmployeeReader.processEmployee("Juan", "dd ", "").isPresent());
     }
